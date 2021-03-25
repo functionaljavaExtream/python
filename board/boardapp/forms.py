@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, ValidationError
 from django.contrib.auth.forms import UserCreationForm
-from .models import Webboard, User, Boardreply,TestFileUpload
+from .models import Webboard, User, Boardreply
 
 class BoardCreateForm(ModelForm):
 
@@ -60,9 +60,3 @@ class BoardReplyForm(ModelForm):
         model = Boardreply
         fields = ('replywriter','boardId','replycontent',)
 
-class FileForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(FileForm, self).__init__(*args, **kwargs)
-    class Meta:
-        model = TestFileUpload
-        fields = ['upload_files','boardId', ]

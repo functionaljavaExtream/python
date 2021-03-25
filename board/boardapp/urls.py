@@ -19,7 +19,6 @@ urlpatterns = [
     path('usernameCheck/<str:name>', views.usernameCheckFn, name='usernameCheck'),
     path('logout/', views.logoutFn, name='logout'),
     path('writeReply/', views.BoardReplyWriteFn, name='writeReply'),
-    path('fileTest/', views.gotofileTestFn, name='fileTest'),
-    path('fileUploadTest/', views.fileUploadTestFn, name='fileUploadTest'),
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

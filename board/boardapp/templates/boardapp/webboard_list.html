@@ -143,7 +143,11 @@
             <p style="margin:0px;">일반</p>
           </div>
           <div class="col-sm-3 text-center" style="margin:0px;">
+            {% if webboard.replycount == 0 %}
             <a href="{% url 'view' webboard.pk %}"style="margin:0px;">{{ webboard.title }}</a>
+            {% else %}
+            <a href="{% url 'view' webboard.pk %}"style="margin:0px;">{{ webboard.title }}({{webboard.replycount}})</a>
+            {% endif %}
           </div>
           <div class="col-sm-2 text-center" style="margin:0px;">
             <p style="margin:0px;">{{ webboard.writer }}</p>
@@ -198,9 +202,7 @@
             <div class="col">
               <a  class="btn btn-secondary " href="{% url 'main' %}" role="button">目次</a>            
             </div>
-            <div class="col">
-              <a  class="btn btn-secondary " href="{% url 'fileTest' %}" role="button">fileTest</a>            
-            </div>
+
           <form class="g-3 align-items-center" action="{% url 'search' %}" method="GET">
             <div class="col">
                 <input class="searchbar"type="text" name="search_keyword" id="search_keyword">                       

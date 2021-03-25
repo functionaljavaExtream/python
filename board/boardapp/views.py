@@ -5,9 +5,8 @@ from django.template import loader
 from django.urls import reverse
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView, View
 from django.core.paginator import Paginator
-from .forms import BoardCreateForm, BoardTextViewForm, BoardModifyForm, BoardDeleteForm, UserSigninForm, BoardUserNameSignInCheckForm, BoardReplyForm, FileForm
-from .models import Webboard, User, Boardreply, TestFileUpload
-from .uploadFn import upload_file
+from .forms import BoardCreateForm, BoardTextViewForm, BoardModifyForm, BoardDeleteForm, UserSigninForm, BoardUserNameSignInCheckForm, BoardReplyForm
+from .models import Webboard, User, Boardreply
 from django.db.models import Q
 from django.db.models.functions import Length, Upper
 from django.http import HttpResponse
@@ -48,16 +47,11 @@ class BoardTextCreate(CreateView):
 def boardTextCreateFn(request):
     template_name = 'boardapp/boardwrite.html'
     sessionUser = request.session.get('sessionUser')
-    fileform = FileForm()
     if sessionUser == None or sessionUser == "":
-        context = {
-            'fileform': fileform
-        }
         return render(request,template_name)
     else:
         context = {
-            'sessionUser' : sessionUser,
-            'fileform': fileform
+            'sessionUser' : sessionUser
         }
         return render(request,template_name, context)
 
@@ -79,30 +73,11 @@ class BoardTextModify(UpdateView):
         return reverse('main')
 
 
-class BoardTextDelete(DeleteView):
-    template_name = 'boardapp/boardRead.html'
-    model = Webboard
-    form_class = BoardDeleteForm
-
-    def form_valid(self, form):
-        ''' バリデーションを通った時 '''
-        return super().form_valid(form)
-    
-    def form_invalid(self, form):
-        ''' バリデーションを失敗した時 '''
-        print(form.pk)
-        return super().form_invalid(form)
-
-    def get_success_url(self):
-        return reverse('main')
-
 def BoardTextDeleteFn(request, pk):
     #reply削除
     Boardreply.objects.filter(Q(boardId = pk)).delete()
     Webboard.objects.filter(Q(id = pk)).delete()
-    return redirect('main')
-
-    
+    return redirect('main')    
 
 
 def boardTextViewFn(request,pk):
@@ -296,36 +271,4 @@ def BoardReplyWriteFn(request):
         return redirect('main')
 
 
-def gotofileTestFn(request):
-    template_name = 'boardapp/fileupload.html'
-    form = FileForm()
-    file_list = TestFileUpload.objects.all()
-    context = {
-        'form': form,
-        'file_list': file_list
-    }
-    return render(request,template_name,context)
-
-def fileUploadTestFn(request):
-    template_name = 'boardapp/fileupload.html'
-    if request.method == "POST":
-
-        form = FileForm(request.POST, request.FILES)
-        if form.is_valid():
-            saveFile = form.save(commit = False)
-           
-            if request.FILES:
-                if 'upload_files' in request.FILES.keys():
-                    saveFile.filename = request.FILES['upload_files'].name
-                    saveFile.boardId = request.POST.get('boardId')
-                    print(saveFile.boardId)
-            saveFile.save()
-            return redirect('fileTest')
-        else:
-            print('this is invaild form')
-    else:
-        print('this is not POST method request')
-        form = FileForm()
-    
-    return render(request,template_name,{'form': form})
 

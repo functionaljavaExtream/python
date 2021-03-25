@@ -4,5 +4,6 @@ create table webboard (
     writer varchar(256) not null DEFAULT '',
     FOREIGN KEY (writer) REFERENCES user(username) ON UPDATE CASCADE,
     regdate datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    content text not null
+    content text not null,
+    replycount INTEGER DEFAULT 0
 )
