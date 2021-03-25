@@ -86,9 +86,6 @@ class BoardTextDelete(DeleteView):
 
     def form_valid(self, form):
         ''' バリデーションを通った時 '''
-        # messages.success(self.request, "修正しました。")
-        boardTextReplyDelete(form.pk)
-        print(form.pk)
         return super().form_valid(form)
     
     def form_invalid(self, form):
@@ -99,8 +96,12 @@ class BoardTextDelete(DeleteView):
     def get_success_url(self):
         return reverse('main')
 
-def boardTextReplyDelete(pk):
-    Boardreply.objects.delete(Q(id = pk))
+def BoardTextDeleteFn(request, pk):
+    #reply削除
+    Boardreply.objects.filter(Q(boardId = pk)).delete()
+    Webboard.objects.filter(Q(id = pk)).delete()
+    return redirect('main')
+
     
 
 
