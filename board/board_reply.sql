@@ -6,4 +6,4 @@ create table boardreply (
     FOREIGN KEY (replywriter) REFERENCES user(username) ON UPDATE CASCADE,
     regdate datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     replycontent text not null
-)
+);

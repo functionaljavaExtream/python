@@ -16,6 +16,8 @@ class Webboard(models.Model):
     content = models.TextField()
     regDate = models.DateTimeField(auto_now_add=True)
     replycount = models.IntegerField(default=0)
+    upload_files = models.FileField(upload_to=get_file_path, null=True, blank=True, verbose_name='파일')
+    filename = models.CharField(max_length=64, null=True, verbose_name='첨부파일명')
 
     class Meta:
         managed = False
@@ -38,6 +40,11 @@ class Boardreply(models.Model):
     class Meta:
         managed = False
         db_table = 'boardreply'
+
+class FileUpload(models.Model):
+    boardId = models.CharField(max_length=256)
+    upload_files = models.FileField(upload_to=get_file_path, null=True, blank=True, verbose_name='添付ファイル')
+    filename = models.CharField(max_length=100, null=True, verbose_name='ファイル名')
 
 
 

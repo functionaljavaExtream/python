@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.BoardView.as_view(), name='main'),
     path('create/', views.boardTextCreateFn, name='create'),
-    path('write/', views.BoardTextCreate.as_view(), name='write'),
+    # path('write/', views.BoardTextCreate.as_view(), name='write'),
+    path('write/', views.BoardTextWriteFn, name='write'),
     path('<int:pk>/view/', views.boardTextViewFn, name='view'),
     path('search/', views.boardTextSearch, name='search'),
     # path('<int:pk>/modify/', views.boardTextModifyFn, name='modify'),
@@ -19,6 +20,7 @@ urlpatterns = [
     path('usernameCheck/<str:name>', views.usernameCheckFn, name='usernameCheck'),
     path('logout/', views.logoutFn, name='logout'),
     path('writeReply/', views.BoardReplyWriteFn, name='writeReply'),
+    path('fildownload/<int:id>', views.fileDownloadFn, name='fildownload')
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

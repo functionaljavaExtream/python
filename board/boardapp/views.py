@@ -5,7 +5,7 @@ from django.template import loader
 from django.urls import reverse
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView, View
 from django.core.paginator import Paginator
-from .forms import BoardCreateForm, BoardTextViewForm, BoardModifyForm, BoardDeleteForm, UserSigninForm, BoardUserNameSignInCheckForm, BoardReplyForm
+from .forms import BoardCreateForm, BoardTextViewForm, BoardModifyForm, BoardDeleteForm, UserSigninForm, BoardUserNameSignInCheckForm, BoardReplyForm, FileForm
 from .models import Webboard, User, Boardreply
 from django.db.models import Q
 from django.db.models.functions import Length, Upper
@@ -44,14 +44,37 @@ class BoardTextCreate(CreateView):
     def get_success_url(self):
         return reverse('main')
 
+def BoardTextWriteFn(request):
+    template_name = 'boardapp/webboard_list.html'
+    sessionUser = request.session.get('sessionUser')
+    if request.method == 'POST':
+        textform = BoardCreateForm(request.POST,request.FILES)
+        if textform.is_valid():
+            textform = textform.save(commit=False)
+            if request.FILES:
+                if 'upload_files' in request.FILES.keys():
+                    textform.filename = request.FILES['upload_files'].name
+            textform.save()
+            return redirect('main')
+        else:
+            print('form is not valid')
+            return redirect('main')
+    else:
+        print('request method is not post')
+        return redirect('main')
+                    
+        
+
+
 def boardTextCreateFn(request):
     template_name = 'boardapp/boardwrite.html'
     sessionUser = request.session.get('sessionUser')
+
     if sessionUser == None or sessionUser == "":
-        return render(request,template_name)
+         return render(request,template_name)
     else:
         context = {
-            'sessionUser' : sessionUser
+            'sessionUser' : sessionUser,
         }
         return render(request,template_name, context)
 
@@ -270,5 +293,17 @@ def BoardReplyWriteFn(request):
     else:
         return redirect('main')
 
-
+def fileDownloadFn(request, id):
+    board = get_object_or_404(Webboard, id=id)
+    url = board.upload_files.url[1:]
+    file_url = urllib.parse.unquote(url)    
+    if os.path.exists(file_url):
+        with open(file_url, 'rb') as fh:
+            quote_file_url = urllib.parse.quote(board.filename.encode('utf-8'))
+            response = HttpResponse(fh.read(), content_type=mimetypes.guess_type(file_url)[0])
+            response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'%s' % quote_file_url
+            return response
+        raise Http404
+    else:
+        return redirect('main')
 

@@ -5,5 +5,7 @@ create table webboard (
     FOREIGN KEY (writer) REFERENCES user(username) ON UPDATE CASCADE,
     regdate datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     content text not null,
-    replycount INTEGER DEFAULT 0
-)
+    replycount INTEGER DEFAULT 0,
+    upload_files  text,
+    filename varchar(64) DEFAULT ''
+);

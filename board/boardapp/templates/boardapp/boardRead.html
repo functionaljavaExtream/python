@@ -156,6 +156,12 @@ float: right;
 				<!-- <input hidden id="textCd" name="textCd" th:value="${mstText.textCd}"> -->
 			</div>
 			<div id="textArea" style="margin: auto;">
+				{% if object.upload_files %}
+				<div class="col-12 text-right">
+					<span>첨부파일 :&nbsp;</span>
+					<a href="{% url 'fildownload' object.id %}" >{{ object.filename|truncatechars:25 }}</a>
+				</div>
+				{% endif %}
 				<div class="textbox" id="textBox">
 					{{ object.content }}
 				</div>
