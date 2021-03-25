@@ -1,0 +1,128 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://getbootstrap.com/docs/4.4/examples/product/# -->
+<html>
+  <head>
+    <meta charset="UTF-8">
+      <title>Boardwrite</title>
+      
+<!-- include libraries(jQuery, bootstrap) -->
+  <!-- jquery -->
+  <link rel="stylesheet" href="{% static 'boardapp/bootstrap.min.css' %}">
+  <script src="{% static 'boardapp/bootstrap.bundle.min.js'%}"></script>
+
+
+      
+  </head>
+
+
+<style>
+.main-index {
+  background-color: gray;
+  
+  height: 100px;
+
+}
+
+.mid-block {
+  top:10px;
+  
+  background-color: silver;
+  height: 400px;
+  width: 455px;
+  border: 1px solid black;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.mid-block-left {
+  margin-right: 10px;
+
+
+}
+
+.mid-block-right {
+  float: right;
+  margin-left: 10px;
+
+
+}
+
+.board-block {
+
+  top:10px;
+  
+  background-color: silver;
+  
+    border: 1px solid black;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.hr-marginNone {
+ margin: 0;
+
+}
+
+
+.writebutton {
+float: right;
+font-size: 20px;
+margin-top: 15px;
+}
+
+.board-textArea {
+  width: 1000px;
+  height: 400px;
+}
+
+
+</style>
+
+
+
+
+<body>
+
+  
+<div class="container">
+  <div class="main-index">
+    <h1 class="">Welcome!</h1>
+    <p class="">Welcome to my board!</p>
+  </div>
+</div>
+<main>
+  <form method="post">
+    {% csrf_token %}
+  <div class="container" style="margin-top: 30px;">
+  
+    <div class="col-auto">
+      <div type="text" id="writer" name="writer" style="width: 700px;" placeholder="글쓴이" > {{ object.writer }}</div>
+      <input type="text" id="title" name="title" style="width: 700px;" placeholder="글 제목" value="{{object.title}}"> 
+      
+    </div>
+  
+    <div class="col-auto">
+      
+      <textarea class="board-textArea" name="content" id="content" rows="4" cols="50">{{object.content}}</textarea>
+      <a class="btn btn-primary" href="javascript:if(confirm('修正します。よろしいでしょうか？')){ document.forms[0].submit(); }else{};" role="button">修正</a>
+      <a  class="btn btn-secondary" onclick="onClickBack()" role="button">戻る</a>
+    </div>
+
+
+  </div>
+  
+  </form>
+</main>
+
+
+  <script>
+    function onClickBack() {
+        if(confirm('キーワード一覧画面に戻ります。よろしいでしょうか？')) {
+            location.href="{% url 'main' %}";
+        }
+    }
+</script>
+
+</body></html>

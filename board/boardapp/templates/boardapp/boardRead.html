@@ -1,0 +1,297 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://getbootstrap.com/docs/4.4/examples/product/# -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>BoardRead</title>
+
+<!-- include libraries(jQuery, bootstrap) -->
+<!-- jquery -->
+
+<!-- include summernote css/js-->
+<link rel="stylesheet" href="{% static 'boardapp/bootstrap.min.css' %}">
+<script src="{% static 'boardapp/bootstrap.bundle.min.js'%}"></script>
+
+
+</head>
+
+
+<style>
+.main-index {
+	background-color: gray;
+	height: 100px;
+}
+
+.mid-block {
+	top: 10px;
+	background-color: silver;
+	height: 400px;
+	width: 455px;
+	border: 1px solid black;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.mid-block-left {
+	margin-right: 10px;
+}
+
+.mid-block-right {
+	float: right;
+	margin-left: 10px;
+}
+
+.board-block {
+	top: 10px;
+	background-color: silver;
+	border: 1px solid black;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.hr-marginNone {
+	margin: 0;
+}
+
+.writebutton {
+	float: right;
+	font-size: 20px;
+	margin-top: 15px;
+}
+
+.textbox {
+	height: 400px;
+}
+
+
+
+.textDate::before {
+	content: "";
+	display: inline-block;
+	width: 1px;
+	height: 12px;
+	background: #ccc;
+	margin: 0 10px 0 6px;
+	vertical-align: -2px;
+}
+
+.floatRigth {
+	float: right;
+}
+
+.replyBox {
+	height: 150px;
+	border-top: 2px solid blue;
+	border-bottom: 2px solid blue;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: silver;
+	margin-top: 10px;	
+}
+
+.replyBoxRead {
+   border-top: 2px solid blue;
+   padding-top: 10px;
+   padding-bottom: 10px;
+   margin-top: 10px;	
+}
+
+
+
+.replyBox-writer {
+
+height: 35px;
+border: 1px solid black;
+margin-right: 20px;
+margin-left: 20px;
+background-color: white;
+}
+.replyBox-content {
+
+  height: 100px;
+  border: 1px solid black;
+}
+
+.replyBox-control {
+margin-top: 5px;
+height: 30px;
+float: right;
+}
+
+.replyBoxReadfragment {
+ height: 20px;
+}
+
+</style>
+
+
+
+
+<body>
+	<div class="container">
+		<div class="main-index">
+			<h1 class="">Welcome!</h1>
+			<p class="">Welcome to my boardView!</p>
+		</div>
+	</div>
+
+	<div class="container">
+			<div class="row" style="margin: auto;" id="titleBox">
+				<h3 type="text" style="font-size: x-large" id="title" name="title"
+					>{{ object.title }}</h3>
+			</div>
+			<div class="row">
+				<div class="col-sm-8">
+					<div class="col-sm-2" type="text" id="writer" name="writer">
+						{{ object.writer }}
+					</div>
+					<div class="textDate col-sm-6" id="regDate" name="regDate">
+						{{ object.regDate }}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<hr style="margin-top: 1px; margin-bottom: 10px;">
+				<!-- <input hidden id="textCd" name="textCd" th:value="${mstText.textCd}"> -->
+			</div>
+			<div id="textArea" style="margin: auto;">
+				<div class="textbox" id="textBox">
+					{{ object.content }}
+				</div>
+				<div class="col">
+					<a  class="btn btn-secondary " href="{% url 'main' %}" role="button">目次</a>    
+					<input class="btn btn-secondary"  type="button" style="float: right;" value="削除" onclick="deleteText('{{ object.id }}')"/> 
+					<a  class="btn btn-secondary " href="{% url 'modify' object.id %}" role="button">修正</a> 
+					<!-- <input name="firstButtons" type="button" value="글 수정" style="float: right;" onclick="modifyText({{Object.id}})" />  -->
+				</div>
+
+
+
+			</div>
+
+	</div>
+
+      <div class="container replyBoxRead" id="replyListRead" >
+	  </div>
+
+    <form id="deleteform" name="deleteform" method="post">
+		{% csrf_token%}
+	</form>	
+	{% for reply in reply_list %}
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-2 text-center" style="margin:0px;">
+				<p style="margin:0px;">{{ reply.replywriter }}</p>
+			</div>
+			<div class="col-sm-5 text-center" style="margin:0px;">
+				<p style="margin:0px;">{{ reply.replycontent }}</p>
+			</div>   
+			<div class="col-sm-5 text-center" style="margin:0px;">
+				  <p style="margin:0px;">{{ reply.regdate }}</p>
+			</div>   
+		</div>
+	</div>
+	{% endfor %}
+
+	<div class="container replyBox">
+		
+
+		<form id="replyForm" action="{% url 'writeReply' %}" method="POST">
+			{% csrf_token %}
+			<div class=" row">
+				{% if sessionUser %}
+				<input id="replywriter" name="replywriter" class="col-sm-2 replyBox-writer text-center" value="{{ sessionUser }}"readonly>
+				{% else %}
+				<input id="replywriter" name="replywriter" class="col-sm-2 replyBox-writer text-center" />
+				{% endif %}
+				<textarea id="replycontent" name="replycontent" class="col-sm-9 replyBox-content" ></textarea>
+				<input type="hidden" name="boardId" value="{{object.id}}">
+			  </div>
+			  <div class="row">
+				<div class="col-sm-4 replyBox-control">
+				  <input name="replyButtons" style="float:right; margin-right: 24px;" type="submit" value="reply" />
+				  </div>			
+			  </div>
+		</form>
+
+	</div>
+
+<script>
+function cancel() {
+	location.reload();
+
+}
+
+function deleteText(id) {
+	if(confirm('削除します。よろしいでしょうか')) {
+		const deleteform = document.getElementById('deleteform');
+				
+		deleteform.action =`{% url 'delete' '9999999999' %}`.replace('9999999999', id)
+		// deleteform.action =test
+		 deleteform.submit();
+	}
+}
+
+
+
+function saveText(frm) {	
+	frm.submit();
+	//console.log(frm);
+}
+
+
+async function saveReply() {
+	const replyWriter = document.getElementById("replyWriter").innerText;
+	const replyContent = document.getElementById("replyContent").value;
+	const textCd = document.getElementById("textCd").getAttribute("value");
+	let formData = new FormData();
+	formData.append("replyWriter", replyWriter);
+	formData.append("replyContent", replyContent);
+	formData.append("textCd", textCd);
+
+	fetch("/board/saveReply", {
+		    method: "POST",
+		    body: formData
+		  })
+		  .then(response => response.json())
+		  .then(data => makeReplyList(data))
+}
+
+function makeReplyList(replyList) {
+	const replyListRead = document.getElementById("replyListRead");
+	let html = "";
+
+	
+	replyList.map(x=>{
+		html+=`<div class="col-sm-2 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.writer.userName}</div>`;
+		html+=`<div class="col-sm-7 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.replyContents}</div>`;
+		html+=`<div class="col-sm-3 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.updateDatetime}</div>`;
+	});
+		$("#replyListRead").html(html);
+
+	
+}
+
+
+/**
+function makeReplyList(replyList) {
+	const replyListRead = document.getElementById("replyListRead");
+	let html = "";
+	
+	replyList.map(x=>{
+		html+=`<div class="col-sm-2 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.writer.userName}</div>`;
+		html+=`<div class="col-sm-7 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.replyContents}</div>`;
+		html+=`<div class="col-sm-3 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.updateDatetime}</div>`;
+	});
+	
+	replyListRead.html(html);
+	
+}
+*/
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+
+<!-- 
+<div class="container">
+    <form action="{%url 'fileUploadTest'%}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="card-footer">
+            <div class="form-group">
+                {{ form.upload_files }}
+                <small id="help" class="form-text text-muted">
+                    [파일 업로드]&nbsp;첨부할 파일을 업로드해주세요. 여러 파일은 압축해서 업로드해주세요.
+                </small>
+            </div>
+        </div>
+        <input type="submit" value="upload">
+    </form>
+    
+    <div id="uplodedFile">
+
+    </div>
+</div> -->
+
+<form action="{%url 'fileUploadTest'%}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="card-footer">
+        <div class="form-group">
+            {{ form.boardId }}
+            {{ form.upload_files }}
+            <small id="help" class="form-text text-muted">
+                [파일 업로드]&nbsp;첨부할 파일을 업로드해주세요. 여러 파일은 압축해서 업로드해주세요.
+            </small>
+        </div>
+    </div>
+    <input type="submit" value="upload">
+</form>
+
+</body>
+</html>

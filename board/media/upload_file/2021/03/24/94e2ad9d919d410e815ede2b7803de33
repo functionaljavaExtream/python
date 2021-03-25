@@ -1,0 +1,7 @@
+create table webboard (
+    idx int(6) unsigned auto_increment primary key,
+    title varchar(200) not null,
+    writer varchar(50) not null,
+    regdate varchar(20) not null,
+    content text not null
+)

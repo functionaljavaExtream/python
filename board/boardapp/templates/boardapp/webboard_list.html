@@ -1,0 +1,215 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{% static 'boardapp/bootstrap.min.css' %}">
+        <script src="{% static 'boardapp/bootstrap.bundle.min.js'%}"></script>
+        <title>Board</title>
+    </head>
+
+    
+<style>
+    .main-index {
+      background-color: gray;
+      
+      height: 100px;
+    
+    }
+    
+    .mid-block {
+      top:10px;
+      
+      background-color: silver;
+      height: 400px;
+      width: 455px;
+      border: 1px solid black;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+    
+    .mid-block-left {
+      margin-right: 10px;
+    
+    
+    }
+    
+    .mid-block-right {
+      float: right;
+      margin-left: 10px;
+    
+    
+    }
+    
+    .board-block {
+    
+      top:10px;
+      
+      background-color: silver;
+      
+        border: 1px solid black;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+    
+    .hr-marginNone {
+     margin: 0;
+    
+    }
+    
+    
+    .writebutton {
+    float: right;
+    font-size: 20px;
+    margin-top: 15px;
+    }
+    
+    .header-btn {
+      margin: 5px;
+    }
+    
+    
+    </style>
+<body>
+    <div class="container">
+        <div class="main-index">
+          <div class="col-auto">
+            <h1 class="">Welcome!</h1>
+            <div class="row">
+              <p class="col-sm-9">Welcome to my board!</p>
+              
+              {% if sessionUser%}
+                <p class="col">hello ! {{ sessionUser }}様</p>
+                <a href="{% url 'logout' %}" class="col-auto header-btn btn btn-primary" role="button">Logout</a>
+              {% else %}             
+              <a  class="col header-btn btn btn-primary"  href="{% url 'gotosignin' %}" role="button">SignIn</a>         
+              <a  class="col header-btn btn btn-primary"  href="{% url 'gotologin' %}" role="button">Login</a>
+              {% endif%}
+            </div>
+          </div>
+
+
+
+        </div>
+
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-7">
+                  <h1 class="">Board</h1>
+            </div>
+            <div class="col-sm-5">
+              <h1 class="">
+                  <a class="writebutton"  href="{% url 'create' %}">write</a>
+              </h1>
+            </div>
+        </div>
+            
+        
+            <hr class ="hr-marginNone" style="height:2px;border-width:0;color:gray;background-color:black">
+        <div class="row">
+          <div class="col-sm-2 text-center"  style="margin:0px;">
+            <p style="margin:0px;">No.</p>
+          </div>
+          <div class="col-sm-1 text-center" style="margin:0px;">
+            <p style="margin:0px;">check</p>
+          </div>
+          <div class="col-sm-3 text-center" style="margin:0px;">
+            <p style="margin:0px;">Title</p>
+          </div>
+          <div class="col-sm-2 text-center" style="margin:0px;">
+            <p style="margin:0px;">User</p>
+          </div>
+          <div class="col-sm-2 text-center" style="margin:0px;">
+            <p style="margin:0px;">Date</p>
+          </div>
+          <div class="col-sm-2 text-center" style="margin:0px;">
+            <p style="margin:0px;">view</p>
+          </div>
+        </div>
+        
+
+        
+              <hr  class ="hr-marginNone" style="height:2px;border-width:0;color:gray;background-color:black">
+      <!-- text spreading? -->
+      {% for webboard in object_list %}
+        {% with count=forloop.counter %}
+        <div class="row">
+          <div class="col-sm-2 text-center"  style="margin:0px;">
+            <p style="margin:0px;">{{ count }}</p>
+          </div>
+          <div class="col-sm-1 text-center" style="margin:0px;">
+            <p style="margin:0px;">일반</p>
+          </div>
+          <div class="col-sm-3 text-center" style="margin:0px;">
+            <a href="{% url 'view' webboard.pk %}"style="margin:0px;">{{ webboard.title }}</a>
+          </div>
+          <div class="col-sm-2 text-center" style="margin:0px;">
+            <p style="margin:0px;">{{ webboard.writer }}</p>
+          </div>
+          <div class="col-sm-2 text-center" style="margin:0px;">
+            <p style="margin:0px;">{{ webboard.regDate }}</p>
+          </div>
+          <div class="col-sm-2 text-center" style="margin:0px;">
+            <p style="margin:0px;">0</p>
+          </div>          
+        </div>
+        {% endwith %}
+             <hr  class ="hr-marginNone" style="height:1px;border-width:0;color:gray;background-color:silver">
+        {% endfor %}
+        </div>
+        
+
+        <div class="row justify-content-around"> 
+          
+          <ul class="col-auto pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?search_keyword={{ search_keyword }}&page={{ page_obj.previous_page_number }}">前へ</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link"  href="#" tabindex="-1" aria-disabled="true">前へ</a>
+            </li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#!">{{ num }}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a  class="page-link" href="?search_keyword={{ search_keyword }}&page={{ num }}">{{ num }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a  class="page-link" href="?search_keyword={{ search_keyword }}&page={{ page_obj.next_page_number }}">次へ</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a  class="page-link" href="#" tabindex="-1" aria-disabled="true">次へ</a>
+            </li>
+            {% endif %}
+        </ul>
+          <div class="row">
+            <div class="col">
+              <a  class="btn btn-secondary " href="{% url 'main' %}" role="button">目次</a>            
+            </div>
+            <div class="col">
+              <a  class="btn btn-secondary " href="{% url 'fileTest' %}" role="button">fileTest</a>            
+            </div>
+          <form class="g-3 align-items-center" action="{% url 'search' %}" method="GET">
+            <div class="col">
+                <input class="searchbar"type="text" name="search_keyword" id="search_keyword">                       
+                <a  class="btn btn-primary searchbarbutton" href="javascript:document.forms[0].submit();" role="button">検索</a>            
+            </div>
+
+          </form>            
+        </div>
+ 
+      </div>
+</body>
+</html>

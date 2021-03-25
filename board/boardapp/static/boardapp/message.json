@@ -1,0 +1,12 @@
+{
+    "message": {
+        "signIn": {
+            "success":{
+                "enable_username": "登録可能なUsernameです。"
+            },
+            "falied":{
+                "disable_username":"このUsernameは既に存在します"
+            } 
+        }
+    }
+}
