@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://getbootstrap.com/docs/4.4/examples/product/# -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Board</title>
+      
+  <!-- jquery -->
+  <link rel="stylesheet" href="{% static 'boardapp/bootstrap.min.css' %}">
+  <script src="{% static 'boardapp/bootstrap.bundle.min.js'%}"></script>
+      
+  </head>
+
+
+<style>
+.main-index {
+  background-color: gray;
+  
+  height: 100px;
+
+}
+
+.mid-block {
+  top:10px;
+  
+  background-color: silver;
+  height: 400px;
+  width: 455px;
+  border: 1px solid black;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.mid-block-left {
+  margin-right: 10px;
+
+
+}
+
+.mid-block-right {
+  float: right;
+  margin-left: 10px;
+
+
+}
+
+.board-block {
+
+  top:10px;
+  
+  background-color: silver;
+  
+    border: 1px solid black;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.hr-marginNone {
+ margin: 0;
+
+}
+
+
+.writebutton {
+float: right;
+font-size: 20px;
+margin-top: 15px;
+}
+
+
+</style>
+
+
+
+
+<body>
+
+<header th:replace="/fragment/header :: header"> </header>
+  
+<div class="container">
+  <div class="main-index">
+    <h1 class="">Welcome!</h1>
+    <p class="">Welcome to my board!</p>
+  </div>
+</div>
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-7">
+          <h1 class="">Board</h1>
+    </div>
+    <div class="col-sm-5">
+      <h1 class="">
+          <a class="writebutton"  href="/boardwrite">write</a>
+      </h1>
+    </div>
+  </div>
+
+
+      
+      <hr class ="hr-marginNone" style="height:2px;border-width:0;color:gray;background-color:black">
+  <div class="row">
+    <div class="col-sm-2 text-center"  style="margin:0px;">
+      <p style="margin:0px;">No.</p>
+    </div>
+    <div class="col-sm-1 text-center" style="margin:0px;">
+      <p style="margin:0px;">check</p>
+    </div>
+    <div class="col-sm-3 text-center" style="margin:0px;">
+      <p style="margin:0px;">Title</p>
+    </div>
+    <div class="col-sm-2 text-center" style="margin:0px;">
+      <p style="margin:0px;">User</p>
+    </div>
+    <div class="col-sm-2 text-center" style="margin:0px;">
+      <p style="margin:0px;">Date</p>
+    </div>
+    <div class="col-sm-2 text-center" style="margin:0px;">
+      <p style="margin:0px;">view</p>
+    </div>
+  </div>
+  
+        <hr  class ="hr-marginNone" style="height:2px;border-width:0;color:gray;background-color:black">
+<!-- text spreading? -->
+  <div class="row" th:each="item : ${textList}">
+    <div class="col-sm-2 text-center"  style="margin:0px;">
+      <p style="margin:0px;" th:text="${item.textCd}"></p>
+    </div>
+    <div class="col-sm-1 text-center" style="margin:0px;">
+      <p style="margin:0px;">일반</p>
+    </div>
+    <div class="col-sm-3 text-center" style="margin:0px;">
+      <a style="margin:0px;" th:text="${item.textTitle}" th:href="@{/board/read(value=${item.textCd})}"></a>
+    </div>
+    <div class="col-sm-2 text-center" style="margin:0px;">
+      <p style="margin:0px;" th:text="${item.writer.userId}"></p>
+    </div>
+    <div class="col-sm-2 text-center" style="margin:0px;">
+      <p style="margin:0px;" th:text="${#strings.substring(item.updateDatetime,2,16)}"></p>
+    </div>
+    <div class="col-sm-2 text-center" style="margin:0px;">
+      <p style="margin:0px;" th:text="${item.viewCount}"></p>
+    </div>
+  </div>
+       <hr  class ="hr-marginNone" style="height:1px;border-width:0;color:gray;background-color:silver">
+  </div>
+
+
+
+<footer th:replace="/fragment/footer :: footer"> </footer>
+
+
+
+<script>
+ function readText(text) {
+	 //location.href = `/board/read?value=${v}`;
+	 alert(text);
+ }
+
+
+</script>
+
+</body></html>

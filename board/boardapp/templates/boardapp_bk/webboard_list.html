@@ -11,15 +11,12 @@
     
 <style>
     .main-index {
-      height: auto;
+      background-color: gray;
+      
+      height: 100px;
+    
     }
-    .main-indextext{
-      padding-top: 10px;
-    }
-
-    .searchdiv {
-      margin-top: 18px;
-    }
+    
     .mid-block {
       top:10px;
       
@@ -68,109 +65,40 @@
     }
     
     .header-btn {
-      float: right;
       margin: 5px;
     }
-
-    .side-menu {
-      height: 600px;
-      margin: 15px;
-    }
-
-    .category {
-      margin: 20px 0px 0px 0px;
-    }
-
-    .category-underbar {
-      margin-top: 1px;
-      background-color: black;
-      height: 2px;
-      border-width: 0;
-    }
-
-    .searchbar {
-      width: 100px;
-    }
-    
-    .loginImage {
-      width: 42px;
-      margin-top: 15px;
-    }
-    .text-center {
-      text-align: center;
-      margin: auto;
-      
-    }
-    
-
     
     
     </style>
 <body>
     <div class="container">
+        <div class="main-index">
           <div class="col-auto">
+            <h1 class="">Welcome!</h1>
             <div class="row">
-              <div class="col-3">
-                <h2 class="col main-indextext">Django</h2>
-              </div>
-              <div class="col-6">
-                <form class="row g-3 align-items-center" action="{% url 'search' %}" method="GET">
-                  <div class="col searchdiv ">
-                      <input class="form-control" type="text" name="search_keyword" id="search_keyword" placeholder="search" style="width: 400px;">                       
-                    </div>
-                  <div class="col searchdiv">
-                    <a  class="btn btn-primary searchbarbutton" href="javascript:document.forms[0].submit();" role="button">検索</a>            
-                  </div>      
-                </form>  
-              </div>
+              <p class="col-sm-9">Welcome to my board!</p>
+              
               {% if sessionUser%}
-                <div class="col-auto">
-                  <a href="#" onclick="logoutFn()" ><img class="loginImage"src="{% static 'boardapp/user_no_photo_300x300.png'%}"  alt="logout"></a>
-                </div>
-                <div class="col-auto" style="padding-top: 17px;">
-                  <p style="margin-bottom: 0px;margin-top: 6px;">hello {{ sessionUser }}様</p>
-                </div>
-             
+                <p class="col">hello ! {{ sessionUser }}様</p>
+                <a href="{% url 'logout' %}" class="col-auto header-btn btn btn-primary" role="button">Logout</a>
               {% else %}             
-
-                <div class="col-auto">
-                  <a href="{% url 'gotologin' %}"><img class="loginImage"src="{% static 'boardapp/no_login_300x300.png'%}"  alt="gotologin"></a>
-                </div>
-                <div class="col-auto" style="padding-top: 17px;">
-                  <!-- <p style="margin-bottom: 0px;margin-top: 6px;">hello Guest様</p> -->
-                  <p style="margin-bottom: 0px;margin-top: 6px;">Loginしてください。</p>
-                </div>
-
-              {% endif %}
-              </div>
+              <a  class="col header-btn btn btn-primary"  href="{% url 'gotosignin' %}" role="button">SignIn</a>         
+              <a  class="col header-btn btn btn-primary"  href="{% url 'gotologin' %}" role="button">Login</a>
+              {% endif%}
             </div>
-            <hr>
+          </div>
+
+
+
+        </div>
+
     </div>
 
     <div class="container">
-      <div class="row">
-            <!-- sidemenu -->
-      <div class="col-2 side-menu">
-        <div class="category">
-          <h2>Category</h2>
-          
-        </div>
-        <hr class="category-underbar" >
-        <div>
-          <ul>
-            <li>Board</li>
-            <li>anonymous Board</li>
-          </ul>
-        </div>
-      </div>
-      <!-- boardlist -->
-      <div class="col-9">
         <div class="row">
-        
             <div class="col-sm-7">
                   <h1 class="">Board</h1>
             </div>
-
             <div class="col-sm-5">
               <h1 class="">
                   <a class="writebutton"  href="{% url 'create' %}">write</a>
@@ -206,7 +134,7 @@
               <hr  class ="hr-marginNone" style="height:2px;border-width:0;color:gray;background-color:black">
       <!-- text spreading? -->
       {% for webboard in object_list %}
-        {% with count=page_obj.start_index|add:forloop.counter0 %}
+        {% with count=forloop.counter %}
         <div class="row">
           <div class="col-sm-2 text-center"  style="margin:0px;">
             <p style="margin:0px;">{{ count }}</p>
@@ -234,8 +162,8 @@
         {% endwith %}
              <hr  class ="hr-marginNone" style="height:1px;border-width:0;color:gray;background-color:silver">
         {% endfor %}
-
-
+        </div>
+        
 
         <div class="row justify-content-around"> 
           
@@ -269,29 +197,21 @@
                 <a  class="page-link" href="#" tabindex="-1" aria-disabled="true">次へ</a>
             </li>
             {% endif %}
-
         </ul>
-        <div class="row">
-          <div class="col">
-            <a  class="btn btn-secondary " href="{% url 'main' %}" role="button">目次</a>            
-          </div>          
+          <div class="row">
+            <div class="col">
+              <a  class="btn btn-secondary " href="{% url 'main' %}" role="button">目次</a>            
+            </div>
+
+          <form class="g-3 align-items-center" action="{% url 'search' %}" method="GET">
+            <div class="col">
+                <input class="searchbar"type="text" name="search_keyword" id="search_keyword">                       
+                <a  class="btn btn-primary searchbarbutton" href="javascript:document.forms[0].submit();" role="button">検索</a>            
+            </div>
+
+          </form>            
         </div>
+ 
       </div>
-
-
-
-
-  </div>
-</div>
-</div>       
-
-<script>
-  function logoutFn() {
-    if(confirm("ログアウトします。よろしいでしょうか")) {
-      location.href="{% url 'logout' %}"
-    }
-  }
-</script>
-  
 </body>
 </html>

@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'boardapp/bootstrap.min.css' %}">
+    <script src="{% static 'boardapp/bootstrap.bundle.min.js'%}"></script>
+    <title>キーワード一覧画面</title>
+</head>
+
+
+<body>
+    {% include 'boardapp/nav.html' %}
+    <main>
+        <br>
+        {% if messages %}
+        <div class="layout-message">
+            <div class="container">
+                <div class="col-auto">
+                    <ul class="messages list-unstyled">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags}}"{% endif%}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif%}
+        <div class="layout-add">
+            <div class="container">
+                <div class="row justify-content-end">
+                    <div class="col-4" style="text-align: right;">
+                        <a class="btn btn-primary" href="{% url 'create' %}" role="button" >キーワード追加</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layout-list container">
+            <div class="row">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" class="col-8">キーワード</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for keyword in object_list %}
+                    <tr>
+                        {% with count=page_obj.start_index|add:forloop.counter0 %}
+                        <th scope="row">{{ count }}</th>
+                        <td>{{ keyword.text }}</td>
+                        <td><a class="btn btn-primary" href="{% url 'update' keyword.pk %}" role="button">編集</a></td>
+                        <td><a class="btn btn-secondary" href="#" onclick="keywordDelete('{{ keyword.pk }}')" role="button">削除</a></td>
+                        {% endwith %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <form name="deleteform" method="POST">
+                {% csrf_token %}
+            </form>
+            <script>
+                function keywordDelete(kwid) {
+                    console.log(kwid);
+                    if(confirm('削除します。よろしいですか？')) {
+                        document.deleteform.action = "{% url 'delete' '99999' %}".replace("99999", kwid);
+                        document.deleteform.submit();
+                    }
+                }
+            </script>                
+            </div>
+            <div class="row justify-content-around">
+                <ul class="col-auto pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">前へ</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link"  href="#" tabindex="-1" aria-disabled="true">前へ</a>
+                    </li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#!">{{ num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a  class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a  class="page-link" href="?page={{ page_obj.next_page_number }}">次へ</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a  class="page-link" href="#" tabindex="-1" aria-disabled="true">次へ</a>
+                    </li>
+                    {% endif %}
+                </ul> 
+            </div>
+        </div>
+    </main>
+    
+</body>
+</html>

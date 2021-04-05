@@ -19,7 +19,9 @@ class BoardView(ListView):
     def get(self, request, *args, **kwargs):
         sessionUser = request.session.get('sessionUser')
         page_obj = Paginator(self.queryset,self.paginate_by)
-        page_num = 1
+        page_num = request.GET.get('page')
+        if page_num == None or page_num == "":
+            page_num = 1
         context = {
             'object_list':page_obj.get_page(page_num).object_list,
             'page_obj': page_obj.get_page(page_num),
@@ -193,7 +195,10 @@ def afterSignLogin(request,user):
 
 def logininFn(request):
     template_name = 'boardapp/login.html'
-    return render(request,template_name)
+    context = {
+        'loginError':""
+    }
+    return render(request,template_name, context)
 
 def userLogInFn(request):
     template_name = 'boardapp/webboard_list.html'

@@ -1,0 +1,75 @@
+{% load static%}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'kywdap/bootstrap.min.css' %}">
+    <script src="{% static 'kywdap/bootstrap.bundle.min.js'%}"></script>
+    <title>登録画面</title>
+</head>
+<body>
+    {% include 'kywdap/nav.html' %}
+    <main>
+        <br>
+        <div class="layout-add container">
+            <form class="g-3 align-items-center" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        {% if messages %}
+                        <div class="col-auto">
+                            <ul class="messages list-unstyled">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags}}"{% endif%}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        {% if form.errors %}
+                        <div class="col-auto">
+                            <ul class="messages list-unstyled">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                <li class="alert alert-danger">{{ error }}</li>
+                                {% endfor %}
+                            {% endfor%}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        <div class="col-auto">
+                        <label for="text" class="col-form-lable">キーワード</label>
+                        </div>
+
+                        <div class="col-auto">
+                        {{ form.text|add_class:'form-control'|attr:"aria-decribedby:keywordHelpInline"|attr:"required:true"}}
+                        </div>
+                        <div class="col-auto">
+                        <span id="keywordHelpInline" class="form-text">長さは1-256文字でなければなりません</span>
+                        </div>
+
+                    </div>
+                </div>
+                <br>
+                <div class="row justify-content-between">
+                    <div class="col-auto">
+                        <a  class="btn btn-primary" href="javascript:if(confirm('キーワードを登録します。よろしいでしょうか？')){ document.forms[0].submit(); }else{};" role="button">登録</a>
+                    </div>
+                    <div class="col-auto">
+                        <a  class="btn btn-secondary" href="#" onclick="onClickBack()" role="button">戻る</a>
+                    </div>
+                </div>
+            </form>
+            <script>
+                function onClickBack() {
+                    if(confirm('キーワード一覧画面に戻ります。よろしいでしょうか？')) {
+                        location.href="{% url 'main' %}";
+                    }
+                }
+            </script>
+        </div>
+    </main>
+    
+</body>
+</html>

@@ -1,0 +1,90 @@
+.main-index {
+    background-color: gray;    
+    height: 100px;  
+  }
+  
+  .mid-block {
+    top:10px;    
+    background-color: silver;
+    height: 400px;
+    width: 455px;
+    border: 1px solid black;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  
+  .mid-block-left {
+    margin-right: 10px; 
+  }
+  
+  .mid-block-right {
+    float: right;
+    margin-left: 10px; 
+  }
+  
+  .board-block {  
+    top:10px;    
+    background-color: silver;    
+    border: 1px solid black;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  
+  .hr-marginNone {
+    margin: 0;  
+  }
+  
+  
+  .writebutton {
+    float: right;
+    font-size: 20px;
+    margin-top: 15px;
+  }
+  
+  .header-btn {
+    margin: 5px;
+  }
+  .login-index {
+    border: 2px solid blue;
+    top: 70px;
+    height: 500px;
+    margin-top: 50px;
+    margin-left: 30px;
+    margin-right: 30px;
+    padding-top: 30px;
+}
+
+.login-box{
+    margin-left: 40px;
+    height: 215px;
+    padding-top:20px;
+}
+
+.mid-block {
+    top:10px;
+    background-color: silver;
+    height: 400px;
+    width: 455px;
+    border: 1px solid black;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.mid-block-left {
+    margin-right: 10px;
+}
+
+.mid-block-right {
+    float: right;
+    margin-left: 10px;
+}
+
+.login-input {
+    height: 50px;
+    width: 400px;
+    margin-bottom: 10px;
+}
+
+login-button {
+    width: 100px;
+}

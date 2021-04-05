@@ -4,179 +4,88 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{% static 'boardapp/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'boardapp/signin.css' %}">
   <script src="{% static 'boardapp/bootstrap.bundle.min.js'%}"></script>
     <title>signin service</title>
-    <style>
-      .main-index {
-        background-color: gray;
-        
-        height: 100px;
-      
-      }
-      
-      .mid-block {
-        top:10px;
-        
-        background-color: silver;
-        height: 400px;
-        width: 455px;
-        border: 1px solid black;
-        margin-left: 5px;
-        margin-right: 5px;
-      }
-      
-      .mid-block-left {
-        margin-right: 10px;
-      
-      
-      }
-      
-      .mid-block-right {
-        float: right;
-        margin-left: 10px;
-      
-      
-      }
-      
-      .board-block {
-      
-        top:10px;
-        
-        background-color: silver;
-        
-          border: 1px solid black;
-        margin-left: 5px;
-        margin-right: 5px;
-      }
-      
-      .hr-marginNone {
-       margin: 0;
-      
-      }
-      
-      
-      .writebutton {
-      float: right;
-      font-size: 20px;
-      margin-top: 15px;
-      }
-      
-      .header-btn {
-        margin: 5px;
-      }
-      .login-index {
-  border: 2px solid blue;
-  top: 70px;
-  height: 500px;
-  margin-top: 50px;
-  margin-left: 30px;
-  margin-right: 30px;
-  padding-top: 30px;
-}
-
-.login-box{
-margin-left: 40px;
-height: 215px;
-padding-top:20px;
-}
-
-.mid-block {
-  top:10px;
-  
-  background-color: silver;
-  height: 400px;
-  width: 455px;
-  border: 1px solid black;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.mid-block-left {
-  margin-right: 10px;
-
-
-}
-
-.mid-block-right {
-  float: right;
-  margin-left: 10px;
-
-
-}
-
-.login-input {
-height: 50px;
-width: 400px;
-margin-bottom: 10px;
-}
-
-login-button {
-  width: 100px;
-
-}
-
-      
-      </style>
 </head>
 <body>
-  <div class="container">
-    <div class="main-index">
-      <div class="col-auto">
-        <h1 class="">Welcome!</h1>
-        <div class="row">
-          <p class="col-sm-9">Sign IN!</p>
+  <section class="signin-form">
+    <h1>Django</h1>
+    <form action="{% url 'signin' %}" method="POST">
+      {% csrf_token %}
+      {% if idCheck.verification == True or idCheck.verification == False %}
+      <p>{{idCheck.message}}</p>
+      <div class="int-area">
+        <input type="text" name="username" id="username" autocomplete="off" value="{{ idCheck.username }}" required>
+        <label for="username">USER NAME</label>
+      </div>
+      {% else %}
+      <div class="int-area">
+        <input type="text" name="username" id="username" autocomplete="off" required>
+        <label for="username">USER NAME</label>
+      </div>
+      {% endif %}
+      <div class="caption">
+        <div class="col">
+          <a href="#" onclick="usernameCheck()">namecheck</a>
+          <p id="usernameCheck"></p>          
         </div>
+      </div>
+      <div class="int-area">
+      </div>
+      <div class="int-area">
+        <input type="password" name="userpassword" id="userpassword" autocomplete="off" required>
+        <label for="username">PASSWORD</label>
+      </div>
+      <div class="int-area">
+        <input type="password" name="userpasswordvali" id="userpasswordvali" autocomplete="off" onkeyup="pwvalidationCheck()" required>
+        <label for="userpasswordvali">PASSWORD確認</label>
+        <p id="passwordCheck" name="passwordCheck"></p>
+      </div>
+      <div class="int-area">
+        <input type="text" name="usermail" id="usermail" autocomplete="off" required>
+        <label for="username">EMAIL ADDRESS</label>
+      </div>
+
+      <div class="btn-area">
+        <button id="loginbutton" type="submit" disabled>SIGN IN</button>
+      </div>
+    </form>
+    <div class="caption">
+      <div class="col">
+        <a href="{% url 'main' %}">戻る</a>
       </div>
     </div>
+  </section>
+  <form  id="usernameSearchform" name="usernameSearchform" method="POST">
+    {% csrf_token %}
+  </form>
+<script>
+  function usernameCheck() {
+    const username = document.getElementById('username').value;
+    if(username === "" || username === null) {
+      document.getElementById('usernameCheck').innerHTML = "ユーザーネームを入力してください。"
+      return;
+    }
+    document.usernameSearchform.action = `{% url 'usernameCheck' '9999999999' %}`.replace('9999999999', username)
+    document.usernameSearchform.submit();
+  }
 
-</div>
-    <div class="container">
-        <div class="login-index">
-      
-        <div class="col-sm-7 login-box">
-          <form action="{% url 'signin' %}" method="POST">
-            {% csrf_token %}
-          <div>
-            {% if idCheck.verification == True %}
-            <p>{{idCheck.message}}</p>
-            <input class="login-input" type="text" id="username" name="username" placeholder="username" value="{{ idCheck.username }}">
-            {% elif idCheck.verification == False%}
-            <p>{{idCheck.message}}</p>
-            <input class="login-input" type="text" id="username" name="username" placeholder="username" value="{{ idCheck.username }}">
-            {% else %}
-            <input class="login-input" type="text" id="username" name="username" placeholder="username">
-            {% endif %}
-            <input  type="button" class="btn btn-primary login-button" value="nameCheck!" onclick="usernameCheck()"/>
-            <br>
-            <input class="login-input" type="password" id="userpassword" name="userpassword" placeholder="password">
-            <br>
-            <input class="login-input" type="text" id="usermail" name="usermail" placeholder="Email"> 
-          </div>
-          {% if idCheck.verification == True %}
-          <input  type="submit" class="btn btn-lg btn-primary btn-block login-button" style="width: 400px;" value="Sign In!"/>        
-          {% else %}
-          <input  type="submit" class="btn btn-lg btn-primary btn-block login-button" style="width: 400px;" disabled value="Sign In!"/>        
-          {% endif %}
-        </form>
-        <input  type="button" class="btn btn-lg btn-secondary btn-block login-button" style="width: 400px;" onclick="back()" value="back"/>        
-        </div>             
-       
-      
-        </div>
-      </div>
-      <form name="usernameSearchform" method="POST">
-        {% csrf_token %}
-      </form>
-      <script>
-        function usernameCheck() {
-          username = document.getElementById('username').value;
-          document.usernameSearchform.action = `{% url 'usernameCheck' '9999999999' %}`.replace('9999999999', username)
-          document.usernameSearchform.submit();
-        }
+  function pwvalidationCheck() {
+    const password = document.getElementById('userpassword').value;
+    const passwordvali = document.getElementById('userpasswordvali').value;
+    const loginbutton = document.getElementById('loginbutton')
+    let pwcheck = document.getElementById('passwordCheck').innerHTML
+    if(password !== passwordvali ) {
+      document.getElementById('passwordCheck').innerHTML = "パスワードが間違います。"
+      loginbutton.setAttribute('disabled','disabled');
+    } else {
+      document.getElementById('passwordCheck').innerHTML = "パスワードが一致します。"
+      loginbutton.removeAttribute('disabled');
+    }
 
-        function back() {
-          location.href = "{% url 'main' %}"
-        }
-      </script>
+  }
+
+</script>
 </body>
 </html>

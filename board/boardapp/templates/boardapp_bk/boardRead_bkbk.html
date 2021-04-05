@@ -1,0 +1,271 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://getbootstrap.com/docs/4.4/examples/product/# -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>BoardRead</title>
+
+<!-- include libraries(jQuery, bootstrap) -->
+<!-- jquery -->
+
+<!-- include summernote css/js-->
+<link rel="stylesheet" href="{% static 'boardapp/bootstrap.min.css' %}">
+<script src="{% static 'boardapp/bootstrap.bundle.min.js'%}"></script>
+
+
+</head>
+
+
+<style>
+.main-index {
+	background-color: gray;
+	height: 100px;
+}
+
+.mid-block {
+	top: 10px;
+	background-color: silver;
+	height: 400px;
+	width: 455px;
+	border: 1px solid black;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.mid-block-left {
+	margin-right: 10px;
+}
+
+.mid-block-right {
+	float: right;
+	margin-left: 10px;
+}
+
+.board-block {
+	top: 10px;
+	background-color: silver;
+	border: 1px solid black;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.hr-marginNone {
+	margin: 0;
+}
+
+.writebutton {
+	float: right;
+	font-size: 20px;
+	margin-top: 15px;
+}
+
+.textbox {
+	height: 400px;
+}
+
+
+
+.textDate::before {
+	content: "";
+	display: inline-block;
+	width: 1px;
+	height: 12px;
+	background: #ccc;
+	margin: 0 10px 0 6px;
+	vertical-align: -2px;
+}
+
+.floatRigth {
+	float: right;
+}
+
+.replyBox {
+	height: 150px;
+	border-top: 2px solid blue;
+	border-bottom: 2px solid blue;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: silver;
+	margin-top: 10px;	
+}
+
+.replyBoxRead {
+   border-top: 2px solid blue;
+   padding-top: 10px;
+   padding-bottom: 10px;
+   margin-top: 10px;	
+}
+
+
+
+.replyBox-writer {
+
+height: 35px;
+border: 1px solid black;
+margin-right: 20px;
+margin-left: 20px;
+background-color: white;
+}
+.replyBox-content {
+
+  height: 100px;
+  border: 1px solid black;
+}
+
+.replyBox-control {
+margin-top: 5px;
+height: 30px;
+float: right;
+}
+
+.replyBoxReadfragment {
+ height: 20px;
+}
+
+</style>
+
+
+
+
+<body>
+	<div class="container">
+		<div class="main-index">
+			<h1 class="">Welcome!</h1>
+			<p class="">Welcome to my boardView!</p>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<h3 type="text" style="font-size: x-large" id="title" name="title"
+		>{{ object.title }}</h3>
+
+<div class="row">
+	<div class="col-sm-8">
+		<div class="col-sm-2" type="text" id="writer" name="writer">
+			{{ object.writer }}
+		</div>
+		<div class="textDate col-sm-8" id="regDate" name="regDate">
+			{{ object.regDate }}
+		</div>
+	</div>
+
+</div>
+
+<div id="textArea" style="margin: auto;">
+	<div class="textbox" id="textBox">
+		{{ object.content }}
+	</div>
+</div>
+	</div>
+
+
+
+	
+<!-- 	
+	<div class="container replyBox">
+      <div class=" row">
+		<div id="replyWriter" name="replyWriter" class="col-sm-2 replyBox-writer text-center" th:text="${user.userId}"></div>
+		<textarea id="replyContent" name="replyContent" class="col-sm-9 replyBox-content" placeholder="댓글은 당신의 얼굴입니다." ></textarea>
+	  </div>
+	  <div class="row">
+		<div class="col-sm-4 replyBox-control">
+		  <input name="replyButtons" style="float:right; margin-right: 24px;" type="button" value="댓글작성" onclick="saveReply()"/>
+      	</div>			
+      </div>
+	</div> -->
+
+<script>
+function modifyText() {
+	document.getElementById('textBox').style.display = 'none';
+	$('#textBoxArea').summernote({
+		  height: 300,                 // 에디터 높이
+		  minHeight: null,             // 최소 높이
+		  maxHeight: null,             // 최대 높이
+		  focus: true
+    });
+	document.getElementById('title').style.display ='none';
+	document.getElementById('titleModify').style.display = 'block';
+	document.getElementById('titleModify').style.border ='1px solid black';
+	Array.prototype.slice.call(document.getElementsByName("firstButtons"))
+	   .map(x => x.style.display = 'none');
+	Array.prototype.slice.call(document.getElementsByName("secondButtons"))
+	   .map(x => x.style.display = 'block');
+	//document.getElementById('summernote').style.display = 'block';
+}
+
+function cancel() {
+	location.reload();
+
+}
+
+
+function deleteText() {
+	let textCd = document.getElementById("textCd").getAttribute("value");
+	location.href = `/board/delete?value=${textCd}`;
+	
+}
+
+
+
+function saveText(frm) {	
+	frm.submit();
+	//console.log(frm);
+}
+
+
+async function saveReply() {
+	const replyWriter = document.getElementById("replyWriter").innerText;
+	const replyContent = document.getElementById("replyContent").value;
+	const textCd = document.getElementById("textCd").getAttribute("value");
+	let formData = new FormData();
+	formData.append("replyWriter", replyWriter);
+	formData.append("replyContent", replyContent);
+	formData.append("textCd", textCd);
+
+	fetch("/board/saveReply", {
+		    method: "POST",
+		    body: formData
+		  })
+		  .then(response => response.json())
+		  .then(data => makeReplyList(data))
+}
+
+function makeReplyList(replyList) {
+	const replyListRead = document.getElementById("replyListRead");
+	let html = "";
+
+	
+	replyList.map(x=>{
+		html+=`<div class="col-sm-2 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.writer.userName}</div>`;
+		html+=`<div class="col-sm-7 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.replyContents}</div>`;
+		html+=`<div class="col-sm-3 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.updateDatetime}</div>`;
+	});
+		$("#replyListRead").html(html);
+
+	
+}
+
+
+/**
+function makeReplyList(replyList) {
+	const replyListRead = document.getElementById("replyListRead");
+	let html = "";
+	
+	replyList.map(x=>{
+		html+=`<div class="col-sm-2 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.writer.userName}</div>`;
+		html+=`<div class="col-sm-7 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.replyContents}</div>`;
+		html+=`<div class="col-sm-3 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.updateDatetime}</div>`;
+	});
+	
+	replyListRead.html(html);
+	
+}
+*/
+
+</script>
+
+
+</body>
+</html>

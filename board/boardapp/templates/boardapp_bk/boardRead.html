@@ -123,20 +123,6 @@ float: right;
  height: 20px;
 }
 
-.searchbar {
-      width: 100px;
-    }
-    
-    .loginImage {
-      width: 42px;
-      margin-top: 15px;
-    }
-    .text-center {
-      text-align: center;
-      margin: auto;
-      
-    }
-
 </style>
 
 
@@ -144,50 +130,26 @@ float: right;
 
 <body>
 	<div class="container">
-		<div class="col-auto">
-            <div class="row">
-              <div class="col-3">
-                <h2 class="col main-indextext">Django</h2>
-              </div>
-              <div class="col-6">
+		<div class="main-index">
+			<h1 class="">Welcome!</h1>
+			<p class="">Welcome to my boardView!</p>
+		</div>
+	</div>
 
-              </div>
-              {% if sessionUser%}
-                <div class="col-auto">
-                  <a href="#" onclick="logoutFn()" ><img class="loginImage"src="{% static 'boardapp/user_no_photo_300x300.png'%}"  alt="logout"></a>
-                </div>
-                <div class="col-auto" style="padding-top: 17px;">
-                  <p style="margin-bottom: 0px;margin-top: 6px;">hello {{ sessionUser }}様</p>
-                </div>
-             
-              {% else %}             
-
-                <div class="col-auto">
-                  <a href="{% url 'gotologin' %}"><img class="loginImage"src="{% static 'boardapp/no_login_300x300.png'%}"  alt="gotologin"></a>
-                </div>
-                <div class="col-auto" style="padding-top: 17px;">
-                  <!-- <p style="margin-bottom: 0px;margin-top: 6px;">hello Guest様</p> -->
-                  <p style="margin-bottom: 0px;margin-top: 6px;">Loginしてください。</p>
-                </div>
-
-              {% endif %}
-              </div>
-            </div>
-            <hr>
-
+	<div class="container">
 			<div class="row" style="margin: auto;" id="titleBox">
 				<h3 type="text" style="font-size: x-large" id="title" name="title"
 					>{{ object.title }}</h3>
 			</div>
 			<div class="row">
-
+				<div class="col-sm-8">
 					<div class="col-sm-2" type="text" id="writer" name="writer">
 						{{ object.writer }}
 					</div>
 					<div class="textDate col-sm-6" id="regDate" name="regDate">
 						{{ object.regDate }}
 					</div>
-
+				</div>
 			</div>
 			<div class="row">
 				<hr style="margin-top: 1px; margin-bottom: 10px;">
@@ -317,12 +279,22 @@ function makeReplyList(replyList) {
 	
 }
 
-function logoutFn() {
-    if(confirm("ログアウトします。よろしいでしょうか")) {
-      location.href="{% url 'logout' %}"
-    }
-  }
 
+/**
+function makeReplyList(replyList) {
+	const replyListRead = document.getElementById("replyListRead");
+	let html = "";
+	
+	replyList.map(x=>{
+		html+=`<div class="col-sm-2 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.writer.userName}</div>`;
+		html+=`<div class="col-sm-7 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.replyContents}</div>`;
+		html+=`<div class="col-sm-3 replyBoxReadfragment"  name="replyReads" style="border-bottom:1px solid black;">${x.updateDatetime}</div>`;
+	});
+	
+	replyListRead.html(html);
+	
+}
+*/
 
 </script>
 

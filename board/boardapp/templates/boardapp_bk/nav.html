@@ -1,0 +1,17 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="col-auto">
+            <a  class="navbar-brand" href="#">情報検索支援コンテンツ</a>
+        </div>
+        <div class="col-auto justify-content-end">
+            <a  class="btn btn-secondary" href="#" onclick="logout()" role="button">ログアウト</a>
+        </div>
+    </div>
+    <script>
+        function logout() {
+            if(confirm('ログアウトします。よろしいですか？')) {
+                location.href="{% url 'logout' %}";
+            }
+        }
+    </script>
+</nav>
